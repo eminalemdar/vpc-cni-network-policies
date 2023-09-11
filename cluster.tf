@@ -1,33 +1,31 @@
 module "eks" {
-  source  = "github.com/aws-ia/terraform-aws-eks-blueprints?ref=v5.0.0"
+  source  = "terraform-aws-modules/eks/aws"
+  version = "19.16.0"
 
   cluster_name                   = var.cluster_name
   cluster_version                = var.cluster_version
   cluster_endpoint_public_access = true
 
   cluster_addons = {
-    coredns     = {}
-    kube-proxy  = {}
-    vpc-cni     = {
-      # Specify the VPC CNI addon should be deployed before compute to ensure
-      # the addon is configured before data plane compute resources are created
-      # See README for further details
-      before_compute = true
-      most_recent    = true # To ensure access to the latest settings provided
-      configuration_values = jsonencode({
-        env = {
-          ENABLE_NETWORK_POLICY = "true"
+    coredns = {
+      resolve_conflicts_on_create = "OVERWRITE"
+      addon_version  = "v1.10.1-eksbuild.3"
 
-          # Reference docs https://docs.aws.amazon.com/eks/latest/userguide/cni-increase-ip-addresses.html
-          ENABLE_PREFIX_DELEGATION = "true"
-          WARM_PREFIX_TARGET       = "1"
-        }
-      })
+      timeouts = {
+        create = "25m"
+        delete = "10m"
+      }
+    }
+    kube-proxy = {
+      most_recent = true
+    }
+    vpc-cni     = {
+      addon_version    = "v1.14.1-eksbuild.1"
     }
   }
 
   vpc_id = module.vpc.vpc_id
-  private_subnet_ids = module.vpc.private_subnets
+  subnet_ids = module.vpc.private_subnets
 
   node_security_group_additional_rules = {
     # Extend node-to-node security group rules. Recommended and required for the Add-ons
@@ -63,10 +61,10 @@ module "eks" {
     }
   }
 
-  managed_node_groups = {
+  eks_managed_node_groups = {
     node_group = {
       node_group_name      = "managed-ondemand"
-      instance_types       = ["t3.large"]
+      instance_types       = ["t3.xlarge"]
       subnet_ids           = module.vpc.private_subnets
       force_update_version = true
       min_size             = 1
