@@ -18,8 +18,6 @@ Network policies are available within VPC CNI!
 
   - [kubectl](https://kubernetes.io/docs/tasks/tools/#kubectl)
 
-  - [Helm](https://helm.sh/docs/intro/install/)
-
   - [Terraform](https://learn.hashicorp.com/tutorials/terraform/install-cli#install-terraform)
 
   - [eksctl](https://docs.aws.amazon.com/eks/latest/userguide/eksctl.html)
