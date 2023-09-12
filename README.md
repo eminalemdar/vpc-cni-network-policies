@@ -1,4 +1,4 @@
-# VPC CNI Network Example
+# VPC CNI Network Policies Example
 
 This repository contains example Terraform code and configuration for enabling Network Policies for VPC CNI on Amazon EKS. There is also a bash scripts to configure VPC CNI and another one for cleanup the resources.
 
