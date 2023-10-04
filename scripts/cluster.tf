@@ -9,7 +9,7 @@ module "eks" {
   cluster_addons = {
     coredns = {
       resolve_conflicts_on_create = "OVERWRITE"
-      addon_version  = "v1.10.1-eksbuild.3"
+      addon_version               = "v1.10.1-eksbuild.3"
 
       timeouts = {
         create = "25m"
@@ -19,12 +19,12 @@ module "eks" {
     kube-proxy = {
       most_recent = true
     }
-    vpc-cni     = {
-      addon_version    = "v1.14.1-eksbuild.1"
+    vpc-cni = {
+      addon_version = "v1.14.1-eksbuild.1"
     }
   }
 
-  vpc_id = module.vpc.vpc_id
+  vpc_id     = module.vpc.vpc_id
   subnet_ids = module.vpc.private_subnets
 
   node_security_group_additional_rules = {
@@ -74,6 +74,6 @@ module "eks" {
   }
 
   tags = {
-      Name = var.cluster_name
+    Name = var.cluster_name
   }
 }
